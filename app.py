@@ -1,0 +1,30 @@
+class dineroPay:
+    merchant_key = ""
+    password = ""
+    operation = ""
+    methods = ""
+    sucess_url = ""
+    cancel_url = ""
+    url_target = ""
+    req_token = ""
+    card_token = ""
+    recurring_init = ""
+    schedule_id = ""
+    hash = ""
+    number = ""
+    amount = ""
+    currency = ""
+    description = ""
+    name = ""
+    email = ""
+    country = ""
+    state = ""
+    address = ""
+    city = ""
+    house_number = ""
+    Zip = ""
+    phone = ""
+
+    def __init__(self, merchant_key, password):
+        self.merchant_key = merchant_key
+        self.password = password
