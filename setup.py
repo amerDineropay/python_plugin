@@ -4,7 +4,7 @@ with open("README", 'r') as f:
     long_description = f.read()
 
 setuptools.setup(
-    name="dineroPay",                     # This is the name of the package
+    name="DineroPay",                     # This is the name of the package
     version="0.0.1",                        # The initial release version
     author="DineroPay",                     # Full name of the author
     description="Providing Dinero Pay services",
@@ -20,7 +20,7 @@ setuptools.setup(
     ],                                      # Information to filter the project on PyPi website
     url='***',                     # Link to your github repository or website:
     python_requires='>=3.6',                # Minimum version requirement of the package
-    py_modules=["dineroPay"],             # Name of the python package
+    py_modules=["DineroPay"],             # Name of the python package
     # Directory of the source code of the package
     package_dir={'': '.'},
     # Install other dependencies if any
