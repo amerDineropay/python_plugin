@@ -48,7 +48,7 @@ class DineroPay:
         data = response.json()
         return data['redirect_url']
 
-    def refund(self, paymentId: str, amt: str = "2.00") -> dict["payment_id":str, "result":str]:
+    def refund(self, paymentId: str, amt: str) -> dict["payment_id":str, "result":str]:
         to_md5 = paymentId + amt + self.password
         url = self.urlPrefix + "api/v1/payment/refund"
         refundBody = {
