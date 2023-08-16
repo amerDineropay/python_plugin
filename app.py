@@ -3,63 +3,67 @@ import requests
 import hashlib
 
 
-class dineroPay:
+class DineroPay:
 
-    Url = "https://checkout.dineropay.com/api/v1/session"
+    urlPrefix = "https://checkout.dineropay.com/"
+    operation = "purchase"
+    headers = {'Content-type': 'application/json'}
 
-    def __init__(self, merchant_key, password):
+    def __init__(self, merchant_key: str, password: str):
         self.merchant_key = merchant_key
         self.password = password
 
-    def authentication(self, operation, success_url, order, customer=None, billing_address=None):
-        self.operation = operation
+    def authentication(self, order: dict["number":str, "amount":str, "currency":str, "description":str],
+                       success_url: str, customer: dict["name":str, "email":str] = None,
+                       billing_address: dict["country":str, "state":str, "address":str,
+                                             "city":str, "house_number":str, "zip": str, "phone":str] = None,
+                       cancel_url: str = None
+                       ) -> str:
         self.success_url = success_url
-        headers = {'Content-type': 'application/json'}
-
+        url = self.urlPrefix + "api/v1/session"
         for key, value in order.items():
             if key == 'number' or key == 'amount' or key == 'currency' or key == 'description':
                 pass
             else:
-                raise ValueError(
+                raise Exception(
                     'Fill in the correct information in Order Object')
 
         to_md5 = order['number'] + order['amount'] + \
             order['currency'] + order['description'] + self.password
 
-        self.auth = {
+        auth = {
             "merchant_key": self.merchant_key,
             "hash": self.genreate_hash(to_md5),
-            "operation": operation,
+            "operation": self.operation,
             "success_url": success_url,
             "order": order,
             "customer": customer,
             "billing_address": billing_address
         }
 
-        json_object = json.dumps(self.auth)
-        response = requests.post(self.Url, json_object, headers=headers)
+        json_object = json.dumps(auth)
+        response = requests.post(url, json_object, headers=self.headers)
         if response.status_code != 200:
-            raise ValueError(response.json())
+            raise Exception(response.json())
         data = response.json()
         return data['redirect_url']
 
-    def genreate_hash(self, to_md5):
-        self.to_md5 = to_md5
+    def refund(self, paymentId: str, amt: str = "2.00") -> dict["payment_id":str, "result":str]:
+        to_md5 = paymentId + amt + self.password
+        url = self.urlPrefix + "api/v1/payment/refund"
+        refundBody = {
+            "merchant_key": self.merchant_key,
+            "payment_id": paymentId,
+            "amount": amt,
+            "hash": self.genreate_hash(to_md5)
+        }
+        json_object = json.dumps(refundBody)
+        response = requests.post(url, json_object, headers=self.headers)
+        if response.status_code != 200:
+            raise Exception(response.json())
+        return response.json()
+
+    def genreate_hash(self, to_md5: str):
         hash = hashlib.sha1(hashlib.md5(to_md5.upper().encode()
                                         ).hexdigest().encode()).hexdigest()
         return hash
-
-
-# test = dineroPay('e1da7888-2096-11ee-ab27-8a14bcdae469',
-#                  '757151ddd44bab20d16345e642c0ed18')
-# x = test.authentication('purchase', 'https://example.com/success', {'number': 'order-1234', 'amount': '2.00',
-#                                                                     'currency': 'USD',
-#                                                                     'description': 'Important gift'}, {'name': 'yahya',
-#                                                                                                        'email': 'user@example.com'}, {'country': 'SA',
-#                                                                                                                                       'state': 'qassim',
-#                                                                                                                                       'address': '3fafeda32',
-#                                                                                                                                       'city': 'unaizah',
-#                                                                                                                                       'house_number': '23232',
-#                                                                                                                                       'zip': '23e23ef32',
-#                                                                                                                                       'phone': ' '})
-# print(x)
