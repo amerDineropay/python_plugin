@@ -1,28 +1,25 @@
-import setuptools
+from setuptools import find_packages, setup
 
-with open("README", 'r') as f:
+with open("README.md", "r") as f:
     long_description = f.read()
 
-setuptools.setup(
-    name="DineroPay",                     # This is the name of the package
-    version="0.0.1",                        # The initial release version
-    author="DineroPay",                     # Full name of the author
+setup(
+    name="dineropay",
+    version="0.0.1",
     description="Providing Dinero Pay services",
-    # Long description read from the the readme file
+    package_dir={"": "app"},
+    packages=find_packages(where="app"),
     long_description=long_description,
     long_description_content_type="text/markdown",
-    # List of all python modules to be installed
-    packages=setuptools.find_packages(),
+    url="https://github.com/amerDineropay/python_plugin/tree/main",
+    author="Dineropay",
+    author_email="support@dineropay.com",
+    license="MIT",
     classifiers=[
-        "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
+        "Programming Language :: Python :: 3.10",
         "Operating System :: OS Independent",
-    ],                                      # Information to filter the project on PyPi website
-    url='***',                     # Link to your github repository or website:
-    python_requires='>=3.6',                # Minimum version requirement of the package
-    py_modules=["DineroPay"],             # Name of the python package
-    # Directory of the source code of the package
-    package_dir={'': '.'},
-    # Install other dependencies if any
-    install_requires=['json', 'requests', 'hashlib']
+    ],
+    install_requires=["requests"],
+    python_requires=">=3.10",
 )
