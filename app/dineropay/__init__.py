@@ -1,1 +1,1 @@
-from .src.dineropay import DineroPay
+from .src.dineropay import Payment

@@ -3,7 +3,7 @@ import requests
 import hashlib
 
 
-class Payment:
+class Dineropay:
 
     urlPrefix = "https://checkout.dineropay.com/"
     operation = "purchase"
